@@ -117,16 +117,14 @@ for j, row in enumerate(data['ID_STAMMDATEN']):
     file_out.write("#"+str(i)+"00= IFCBUILDINGELEMENTPROXY('"+str(randomString(22))+"',4,'"+str(data['ID_STAMMDATEN'][j])+"','Cylinder Extrusion',$,#"+str(i)+"01,#"+str(i)+"10,$,$);\n")
     file_out.write("#"+str(i)+"01= IFCLOCALPLACEMENT($,#"+str(i)+"02);\n")
     file_out.write("#"+str(i)+"02= IFCAXIS2PLACEMENT3D(#"+str(i)+"03,$,$);\n")
-    file_out.write("#"+str(i)+"03= IFCCARTESIANPOINT(("+str(RW)+","+str(HW)+",.0));\n")
+    file_out.write("#"+str(i)+"03= IFCCARTESIANPOINT((.0,.0,.0));\n")
     file_out.write("#"+str(i)+"10= IFCPRODUCTDEFINITIONSHAPE($,$,(#"+str(i)+"30));\n")
-
-    # Position 10 bis 29 für Polyline (Bohransatzpunkt) reserviert
 
     file_out.write("#"+str(i)+"30= IFCSHAPEREPRESENTATION(#202,'Body','SweptSolid',(#"+str(i)+"31));\n")        
     file_out.write("#"+str(i)+"31= IFCEXTRUDEDAREASOLID(#"+str(i)+"37,#"+str(i)+"35,#907,"+str(laenge_abschnitt)+");\n")
     file_out.write("#"+str(i)+"34= IFCRELCONTAINEDINSPATIALSTRUCTURE('"+str(randomString(22))+"',$,'Physical model',$,(#"+str(i)+"00),#520);\n")
     file_out.write("#"+str(i)+"35= IFCAXIS2PLACEMENT3D(#"+str(i)+"36,$,$);\n")        
-    file_out.write("#"+str(i)+"36= IFCCARTESIANPOINT((.0,.0,"+str(ok)+"));\n")
+    file_out.write("#"+str(i)+"36= IFCCARTESIANPOINT(("+str(RW)+","+str(HW)+","+str(ok)+"));\n")
     file_out.write("#"+str(i)+"37= IFCCIRCLEPROFILEDEF(.AREA.,$,$,"+str(radius)+");\n")
 
     file_out.write("#"+str(i)+"40= IFCPROPERTYSET('"+str(randomString(22))+"',$,'HH_Baugrund_Attribute',$,(#"+str(i)+"41,#"+str(i)+"42,#"+str(i)+"43,#"+str(i)+"44,#"+str(i)+"45,#"+str(i)+"46,#"+str(i)+"47,#"+str(i)+"48,#"+str(i)+"49));\n")
