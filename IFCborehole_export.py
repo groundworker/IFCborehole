@@ -78,10 +78,6 @@ file_out.write("#313= IFCDIMENSIONALEXPONENTS(0,0,0,0,0,0,0);\n")
 file_out.write("#314= IFCMEASUREWITHUNIT(IFCPLANEANGLEMEASURE(0.017453293),#315);\n")
 file_out.write("#315= IFCSIUNIT(*,.PLANEANGLEUNIT.,$,.RADIAN.);\n")
 
-#file_out.write("#401= IFCCIRCLEPROFILEDEF(.AREA.,$,#402,#"+str(radius)+");\n")
-#file_out.write("#402= IFCAXIS2PLACEMENT3D(#403,#904,#902);\n")
-#file_out.write("#403= IFCCARTESIANPOINT((.0,.0,.0));\n")
-
 file_out.write("#500= IFCBUILDING('"+str(randomString(22))+"',$,'Baugrundaufschluesse',$,$,#511,$,$,.ELEMENT.,$,$,$);\n")
 file_out.write("#511= IFCLOCALPLACEMENT($,#512);\n")
 file_out.write("#512= IFCAXIS2PLACEMENT3D(#901,$,$);\n")
@@ -127,7 +123,7 @@ for j, row in enumerate(data['ID_STAMMDATEN']):
     file_out.write("#"+str(i)+"36= IFCCARTESIANPOINT(("+str(RW)+","+str(HW)+","+str(ok)+"));\n")
     file_out.write("#"+str(i)+"37= IFCCIRCLEPROFILEDEF(.AREA.,$,$,"+str(radius)+");\n")
 
-    file_out.write("#"+str(i)+"40= IFCPROPERTYSET('"+str(randomString(22))+"',$,'HH_Baugrund_Attribute',$,(#"+str(i)+"41,#"+str(i)+"42,#"+str(i)+"43,#"+str(i)+"44,#"+str(i)+"45,#"+str(i)+"46,#"+str(i)+"47,#"+str(i)+"48,#"+str(i)+"49));\n")
+    file_out.write("#"+str(i)+"40= IFCPROPERTYSET('"+str(randomString(22))+"',$,'Aufschlussbereich',$,(#"+str(i)+"41,#"+str(i)+"42,#"+str(i)+"43,#"+str(i)+"44,#"+str(i)+"45,#"+str(i)+"46,#"+str(i)+"47,#"+str(i)+"48,#"+str(i)+"49));\n")
     file_out.write("#"+str(i)+"41= IFCPROPERTYSINGLEVALUE('_Schichtnummer',$,IFCLABEL('"+str(data['ID_STAMMDATEN'][j])+"'),$);\n")
     file_out.write("#"+str(i)+"42= IFCPROPERTYSINGLEVALUE('_Hauptbestandteil',$,IFCLABEL('"+str(data['HAUPTGEMENGTEIL'][j])+"'),$);\n")
     file_out.write("#"+str(i)+"43= IFCPROPERTYSINGLEVALUE('_Nebenbestandteil/Bemerkung',$,IFCLABEL('"+str(data['NEBENGEMENGTEIL'][j])+"'),$);\n")
@@ -206,7 +202,7 @@ for j, row in enumerate(data['ID_STAMMDATEN']):
             else:
                 data_point=str(data_point)+",#"+str(i)+str(i_pointid)
 
-        file_out.write("#"+str(i)+"60= IFCPROPERTYSET('"+str(randomString(22))+"',$,'HH_Baugrundaufschluesse_Attribute',$,(#"+str(i)+"61,#"+str(i)+"62,#"+str(i)+"63,#"+str(i)+"64,#"+str(i)+"65));\n")
+        file_out.write("#"+str(i)+"60= IFCPROPERTYSET('"+str(randomString(22))+"',$,'Baugrundaufschluss',$,(#"+str(i)+"61,#"+str(i)+"62,#"+str(i)+"63,#"+str(i)+"64,#"+str(i)+"65));\n")
         file_out.write("#"+str(i)+"61= IFCPROPERTYSINGLEVALUE('_Aufschlussnummer',$,IFCLABEL('Pkt-"+str(data['ID_STAMMDATEN'][j])+"'),$);\n")
         file_out.write("#"+str(i)+"62= IFCPROPERTYSINGLEVALUE('_Aufschlussart',$,IFCLABEL('"+str(data['ARCHIVKURZBEZEICHNUNG'][j])+"'),$);\n")
         file_out.write("#"+str(i)+"63= IFCPROPERTYSINGLEVALUE('_Hoehe_Ansatzpunkt',$,IFCLABEL('"+str(data['ANSATZHOEHE_NN'][j])+"'),$);\n")
