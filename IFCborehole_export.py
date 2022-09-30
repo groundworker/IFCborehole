@@ -34,7 +34,7 @@ def circlepoints(n_points=12):
 
 
 file_in = "borehole_data.csv"
-file_out = open("borehole_model.ifc", "w")
+file_out = open("Modell_Aufschuesse_Punkt-Bereich.ifc", "w")
 
 data = read_csv(file_in)
 
@@ -47,7 +47,7 @@ data_U = ""
 data_T = ""
 data_H = ""
 num = 0
-radius = 5
+radius = 3
 
 file_out.write("ISO-10303-21;\n HEADER;\nFILE_DESCRIPTION(( 'ViewDefinition [CoordinationView_V2.0]'),'2;1');\n")
 file_out.write("FILE_NAME('Bohrungen','"+str(time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime()))+"',('Andreas, Sorgatz-Wenzel'),(''),'','','');\n")
