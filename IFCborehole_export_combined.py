@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 @author:Andreas Sorgatz-Wenzel
+
+2023 Erstellung
+25.07.2023 Test von IFCELEMENTASSEMBLY
 """
 
 import random
@@ -34,7 +37,7 @@ def circlepoints(n_points=12):
 
 
 file_in = "borehole_data.csv"
-file_out = open("Modell_Aufschuesse_kombiniert.ifc", "w")
+file_out = open("Modell_Aufschuesse_mod.ifc", "w")
 
 data = read_csv(file_in)
 
@@ -47,7 +50,7 @@ data_U = ""
 data_T = ""
 data_H = ""
 num = 0
-radius = 3.0
+radius = 2.0
 BoreholeAdress={}
 
 file_out.write("ISO-10303-21;\n HEADER;\nFILE_DESCRIPTION(( 'ViewDefinition [CoordinationView_V2.0]'),'2;1');\n")
@@ -56,14 +59,14 @@ file_out.write("FILE_SCHEMA(('IFC2X3'));\nENDSEC;\n")
 
 file_out.write("DATA;\n")
 file_out.write("#100= IFCPROJECT('"+str(randomString(22))+"',#110,'Projekt',$,$,$,$,(#201),#301);\n")
-file_out.write("#110= IFCOWNERHISTORY(#111,#115,$,.NOCHANGE.,$,$,$,$);\n")
+file_out.write("#110= IFCOWNERHISTORY(#111,#115,$,.NOCHANGE.,$,$,$,"+str(round(time.time()))+");\n")
 
 file_out.write("#111= IFCPERSONANDORGANIZATION(#112,#113,$);\n")
 file_out.write("#112= IFCPERSON($,'BIM-Modellierer',$,$,$,$,$,$);\n")
 file_out.write("#113= IFCORGANIZATION($,'Geotechnik',$,$,$);\n")
 file_out.write("#115= IFCAPPLICATION(#113,'0.3','Skript',$);\n")
-file_out.write("#116= IFCSITE('"+str(randomString(22))+"',$,'Baugrund',$,$,#118,$,$,.ELEMENT.,(0,0,0,0),(0,0,0,0),0.,$,$);\n")
-file_out.write("#117= IFCRELAGGREGATES('"+str(randomString(22))+"',$,$,$,#100,(#116));\n")
+file_out.write("#116= IFCSITE('"+str(randomString(22))+"',#110,'Baugrund',$,$,#118,$,$,.ELEMENT.,(0,0,0,0),(0,0,0,0),0.,$,$);\n")
+file_out.write("#117= IFCRELAGGREGATES('"+str(randomString(22))+"',#110,$,$,#100,(#116));\n")
 file_out.write("#118= IFCLOCALPLACEMENT($,#120);\n")
 file_out.write("#119= IFCCARTESIANPOINT((0.,0.,0.));\n")
 file_out.write("#120= IFCAXIS2PLACEMENT3D(#119,$,$);\n")
@@ -79,10 +82,10 @@ file_out.write("#313= IFCDIMENSIONALEXPONENTS(0,0,0,0,0,0,0);\n")
 file_out.write("#314= IFCMEASUREWITHUNIT(IFCPLANEANGLEMEASURE(0.017453293),#315);\n")
 file_out.write("#315= IFCSIUNIT(*,.PLANEANGLEUNIT.,$,.RADIAN.);\n")
 
-file_out.write("#500= IFCBUILDING('"+str(randomString(22))+"',$,'Baugrundaufschluesse',$,$,#118,$,$,.ELEMENT.,$,$,$);\n")
-file_out.write("#519= IFCRELAGGREGATES('"+str(randomString(22))+"',$,$,$,#116,(#500));\n")
-file_out.write("#520= IFCBUILDINGSTOREY('"+str(randomString(22))+"',#110,'Ebene Aufschluesse',$,'Ebene:Ebene',#118,$,'borehole-Storey',.ELEMENT.,.0);\n")
-file_out.write("#521= IFCBUILDINGSTOREY('"+str(randomString(22))+"',#110,'Ebene Punkte',$,'Ebene:Ebene',#118,$,'point-Storey',.ELEMENT.,.0);\n")
+file_out.write("#500= IFCBUILDING('"+str(randomString(22))+"',#110,'Baugrundaufschluesse',$,$,#118,$,$,.ELEMENT.,$,$,$);\n")
+file_out.write("#519= IFCRELAGGREGATES('"+str(randomString(22))+"',#110,$,$,#116,(#500));\n")
+file_out.write("#520= IFCBUILDINGSTOREY('"+str(randomString(22))+"',#110,'Ebene-Aufschluesse',$,'Ebene:Ebene',#118,$,'borehole-storey',.ELEMENT.,0.0);\n")
+file_out.write("#521= IFCBUILDINGSTOREY('"+str(randomString(22))+"',#110,'Ebene-Punkte',$,'Ebene:Ebene',#118,$,'point-storey',.ELEMENT.,0.0);\n")
 file_out.write("#530= IFCRELAGGREGATES('"+str(randomString(22))+"',#110,$,$,#500,(#520));\n")
 file_out.write("#531= IFCRELAGGREGATES('"+str(randomString(22))+"',#110,$,$,#500,(#521));\n")
 
@@ -105,13 +108,13 @@ for j, row in enumerate(data['ID_STAMMDATEN']):
     ok = float(data['ANSATZHOEHE_NN'][j])-float(data['OBERE_TIEFE'][j])
     uk = float(data['ANSATZHOEHE_NN'][j])-float(data['UNTERE_TIEFE'][j])
     laenge_abschnitt = float(data['UNTERE_TIEFE'][j])-float(data['OBERE_TIEFE'][j])
-    RW = data['X_ETRS89'][j]
-    HW = data['Y_ETRS89'][j]
+    RW = round(float(data['X_ETRS89'][j]),3)
+    HW = round(float(data['Y_ETRS89'][j]),3)
 
-    file_out.write("#"+str(i)+"00= IFCBUILDINGELEMENTPROXY('"+str(randomString(22))+"',4,'"+str(data['ID_STAMMDATEN'][j])+"','Cylinder Extrusion',$,#"+str(i)+"01,#"+str(i)+"10,$,$);\n")
+    file_out.write("#"+str(i)+"00= IFCBUILDINGELEMENTPROXY('"+str(randomString(22))+"',#110,'"+str(data['ID_STAMMDATEN'][j])+"','Cylinder Extrusion',$,#"+str(i)+"01,#"+str(i)+"10,$,$);\n")
     file_out.write("#"+str(i)+"01= IFCLOCALPLACEMENT($,#"+str(i)+"02);\n")
     file_out.write("#"+str(i)+"02= IFCAXIS2PLACEMENT3D(#"+str(i)+"03,$,$);\n")
-    file_out.write("#"+str(i)+"03= IFCCARTESIANPOINT((.0,.0,.0));\n")
+    file_out.write("#"+str(i)+"03= IFCCARTESIANPOINT((0.,0.,0.));\n")
     file_out.write("#"+str(i)+"10= IFCPRODUCTDEFINITIONSHAPE($,$,(#"+str(i)+"30));\n")
 
     file_out.write("#"+str(i)+"30= IFCSHAPEREPRESENTATION(#202,'Body','SweptSolid',(#"+str(i)+"31));\n")        
@@ -119,7 +122,7 @@ for j, row in enumerate(data['ID_STAMMDATEN']):
     file_out.write("#"+str(i)+"35= IFCAXIS2PLACEMENT3D(#"+str(i)+"36,$,$);\n")        
     file_out.write("#"+str(i)+"36= IFCCARTESIANPOINT(("+str(RW)+","+str(HW)+","+str(ok)+"));\n")
     
-    file_out.write("#"+str(i)+"40= IFCPROPERTYSET('"+str(randomString(22))+"',$,'Aufschlussbereich',$,(#"+str(i)+"41,#"+str(i)+"42,#"+str(i)+"43,#"+str(i)+"44,#"+str(i)+"45,#"+str(i)+"46,#"+str(i)+"47,#"+str(i)+"48,#"+str(i)+"49));\n")
+    file_out.write("#"+str(i)+"40= IFCPROPERTYSET('"+str(randomString(22))+"',#110,'Aufschlussbereich',$,(#"+str(i)+"41,#"+str(i)+"42,#"+str(i)+"43,#"+str(i)+"44,#"+str(i)+"45,#"+str(i)+"46,#"+str(i)+"47,#"+str(i)+"48,#"+str(i)+"49));\n")
     file_out.write("#"+str(i)+"41= IFCPROPERTYSINGLEVALUE('_Schichtnummer',$,IFCLABEL('"+str(data['ID_STAMMDATEN'][j])+"'),$);\n")
     file_out.write("#"+str(i)+"42= IFCPROPERTYSINGLEVALUE('_Hauptbestandteil',$,IFCLABEL('"+str(data['HAUPTGEMENGTEIL'][j])+"'),$);\n")
     file_out.write("#"+str(i)+"43= IFCPROPERTYSINGLEVALUE('_Nebenbestandteil/Bemerkung',$,IFCLABEL('"+str(data['NEBENGEMENGTEIL'][j])+"'),$);\n")
@@ -129,7 +132,7 @@ for j, row in enumerate(data['ID_STAMMDATEN']):
     file_out.write("#"+str(i)+"47= IFCPROPERTYSINGLEVALUE('_Aufschlussbereich_UK',$,IFCLABEL('"+str(data['UNTERE_TIEFE'][j])+"'),$);\n")
     file_out.write("#"+str(i)+"48= IFCPROPERTYSINGLEVALUE('_Genese',$,IFCLABEL('"+str(data['GENESE'][j])+"'),$);\n")
     file_out.write("#"+str(i)+"49= IFCPROPERTYSINGLEVALUE('_Aufschlussnummer',$,IFCLABEL('"+str(data['ID_SCHICHTDATEN'][j])+"'),$);\n")
-    file_out.write("#"+str(i)+"50= IFCRELDEFINESBYPROPERTIES('"+str(randomString(22))+"',$,$,$,(#"+str(i)+"00),#"+str(i)+"40);\n")
+    file_out.write("#"+str(i)+"50= IFCRELDEFINESBYPROPERTIES('"+str(randomString(22))+"',#110,$,$,(#"+str(i)+"00),#"+str(i)+"40);\n")
 
     kontroll = True
     if empty_column[j]:
@@ -188,30 +191,21 @@ for j, row in enumerate(data['ID_STAMMDATEN']):
     if data['ID_STAMMDATEN'][j] not in data_stammid:
         data_stammid.append(data['ID_STAMMDATEN'][j])
 
-        file_out.write("#"+str(i)+"07= IFCBUILDINGELEMENTPROXY('"+str(randomString(22))+"',4,'"+str(data['ID_STAMMDATEN'][j])+"',$,$,#"+str(i)+"71,$,$,$);\n")
-        file_out.write("#"+str(i)+"08= IFCRELCONTAINEDINSPATIALSTRUCTURE('"+str(randomString(22))+"',110,$,$,(#"+str(i)+"07),#520);\n")
+        #file_out.write("#"+str(i)+"07= IFCBUILDINGELEMENTPROXY('"+str(randomString(22))+"',#110,'"+str(data['ID_STAMMDATEN'][j])+"',$,$,#"+str(i)+"71,$,$,$);\n")
+        file_out.write("#"+str(i)+"07= IFCELEMENTASSEMBLY('"+str(randomString(22))+"',#110,'"+str(data['ID_STAMMDATEN'][j])+"',$,$,#"+str(i)+"71,$,.SITE.,.USERDEFINED.);\n")
+        file_out.write("#"+str(i)+"08= IFCRELCONTAINEDINSPATIALSTRUCTURE('"+str(randomString(22))+"',#110,$,$,(#"+str(i)+"07),#520);\n")
         BoreholeAdress[str(data['ID_STAMMDATEN'][j])] ="#"+str(i)+"07"
         file_out.write("#"+str(i)+"71= IFCLOCALPLACEMENT($,#"+str(i)+"02);\n")
         file_out.write("#"+str(i)+"72= IFCAXIS2PLACEMENT3D(#"+str(i)+"03,$,$);\n")
-        file_out.write("#"+str(i)+"73= IFCCARTESIANPOINT((.0,.0,.0));\n")
+        file_out.write("#"+str(i)+"73= IFCCARTESIANPOINT((0.,0.,0.));\n")
 
-        data_point = ""
-        i_pointid = 10
-        for i_point in circlepoints():
-            i_pointid += 1
-            file_out.write("#"+str(i)+str(i_pointid)+"= IFCCARTESIANPOINT(("+str(float(RW)+radius*i_point[0])+","+str(float(HW)+radius*i_point[1])+","+str(data['ANSATZHOEHE_NN'][j])+"));\n")
-            if i_pointid == 11:
-                data_point="#"+str(i)+str(i_pointid)
-            else:
-                data_point=str(data_point)+",#"+str(i)+str(i_pointid)
-
-        file_out.write("#"+str(i)+"60= IFCPROPERTYSET('"+str(randomString(22))+"',$,'Baugrundaufschluss',$,(#"+str(i)+"61,#"+str(i)+"62,#"+str(i)+"63,#"+str(i)+"64,#"+str(i)+"65));\n")
+        file_out.write("#"+str(i)+"60= IFCPROPERTYSET('"+str(randomString(22))+"',#110,'Baugrundaufschluss',$,(#"+str(i)+"61,#"+str(i)+"62,#"+str(i)+"63,#"+str(i)+"64,#"+str(i)+"65));\n")
         file_out.write("#"+str(i)+"61= IFCPROPERTYSINGLEVALUE('_Aufschlussnummer',$,IFCLABEL('Pkt-"+str(data['ID_STAMMDATEN'][j])+"'),$);\n")
         file_out.write("#"+str(i)+"62= IFCPROPERTYSINGLEVALUE('_Aufschlussart',$,IFCLABEL('"+str(data['ARCHIVKURZBEZEICHNUNG'][j])+"'),$);\n")
         file_out.write("#"+str(i)+"63= IFCPROPERTYSINGLEVALUE('_Hoehe_Ansatzpunkt',$,IFCLABEL('"+str(data['ANSATZHOEHE_NN'][j])+"'),$);\n")
         file_out.write("#"+str(i)+"64= IFCPROPERTYSINGLEVALUE('_Laenge_Baugrundaufschluss',$,IFCLABEL('"+str(data['ENDTEUFE'][j])+"'),$);\n")
         file_out.write("#"+str(i)+"65= IFCPROPERTYSINGLEVALUE('_Aufschlussdatum',$,IFCLABEL('"+str(data['BOHRDATUM'][j])+"'),$);\n")
-        file_out.write("#"+str(i)+"69= IFCRELDEFINESBYPROPERTIES('"+str(randomString(22))+"',$,$,$,(#"+str(i)+"07),#"+str(i)+"60);\n")
+        file_out.write("#"+str(i)+"69= IFCRELDEFINESBYPROPERTIES('"+str(randomString(22))+"',#110,$,$,(#"+str(i)+"07),#"+str(i)+"60);\n")
 
     id_borehole = int(data['ID_STAMMDATEN'][j])
     file_out.write("#"+str(i)+"09= IFCRELAGGREGATES('"+str(randomString(22))+"',#110,$,$,"+str(BoreholeAdress[str(id_borehole)])+",(#"+str(i)+"00));\n")
